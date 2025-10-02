@@ -12,7 +12,7 @@ const slides: SlideData[] = [
 
 export default function Home() {
   return (
-    <main className="w-full">
+    <main className="w-full flex flex-col gap-[40px]">
       {slides.map((s) => (
         <SlideSection key={s.id} {...s} />
       ))}

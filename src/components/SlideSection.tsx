@@ -40,7 +40,7 @@ export default function SlideSection({ id, file, alt, priority, overlay = true, 
     <section
       ref={ref}
       id={id}
-      className={`snap-panel relative h-screen w-full overflow-hidden fade-panel ${
+      className={`snap-panel relative h-screen w-full overflow-hidden fade-panel mb-[10px] last:mb-0 ${
         visible ? "is-visible" : ""
       }`}
     >
