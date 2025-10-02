@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState, useRef } from "react";
 
 // Simple navigation items – adjust to match your Figma design.
 const NAV_ITEMS: { label: string; href: string }[] = [
@@ -11,9 +12,39 @@ const NAV_ITEMS: { label: string; href: string }[] = [
 ];
 
 export default function NavBar() {
+  const [hidden, setHidden] = useState(false);
+  const lastYRef = useRef(0);
+  const tickingRef = useRef(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      if (!tickingRef.current) {
+        window.requestAnimationFrame(() => {
+          const delta = currentY - lastYRef.current;
+          // Only toggle after a small threshold to avoid jitter on trackpads
+            if (Math.abs(delta) > 6) {
+              if (delta > 0 && currentY > 48) {
+                // scrolling down
+                setHidden(true);
+              } else {
+                // scrolling up
+                setHidden(false);
+              }
+            }
+          lastYRef.current = currentY;
+          tickingRef.current = false;
+        });
+        tickingRef.current = true;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-black/40 backdrop-blur-md border-b border-black/10 dark:border-white/10"
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-white/10 bg-black/50 text-gray-200 transition-transform duration-300 will-change-transform ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <div className="mx-auto flex max-w-6xl items-center gap-8 px-6 py-3">
         <Link href="/" className="flex items-center gap-2 select-none">
@@ -32,7 +63,7 @@ export default function NavBar() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="text-sm font-medium text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white transition-colors"
+                className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
               >
                 {item.label}
               </Link>

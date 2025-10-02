@@ -1,16 +1,9 @@
 @import "tailwindcss";
 
+/* Force dark mode by default: remove light scheme */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #050505;
+  --foreground: #f1f1f1;
 }
 
 body {
